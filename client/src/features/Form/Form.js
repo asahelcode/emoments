@@ -1,6 +1,8 @@
 import { Paper, TextField, Typography, Button } from '@material-ui/core';
 import React, { useState } from 'react';
 import FileBase64 from 'react-file-base64';
+import { useDispatch, useSelector } from 'react-redux';
+import { createPost } from '../../action/posts';
 
 import useStyles from './styles';
 
@@ -12,13 +14,17 @@ const Form = () => {
     creator: '',
     selectedFile: '',
   });
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.posts);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // console.log(postData);
+    dispatch(createPost(postData));
   };
   const clear = () => {};
+  
+  console.log('😉', posts);
 
   const classes = useStyles();
 
@@ -65,7 +71,9 @@ const Form = () => {
           variant='outlined'
           fullWidth
           value={postData.tags}
-          onChange={(e) => setpostData({ ...postData, tags: e.target.value.split(',') })}
+          onChange={(e) =>
+            setpostData({ ...postData, tags: e.target.value.split(',') })
+          }
         />
 
         <div className={classes.fileInput}>

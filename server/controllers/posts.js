@@ -1,15 +1,24 @@
-export const fetchPosts = (req, res) => {
+import postMessage from '../models/postMessage.js';
+
+export const fetchPosts = async (req, res) => {
   try {
-    res.status(200).json('I would rule the world');
-  } catch {
-    (error) => console.log(error.message);
+    const posts = await postMessage.find();
+
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(404).json(error.message);
   }
 };
 
-export const createPost = (req, res) => {
+export const createPost = async (req, res) => {
+  let body = req.body;
+
   try {
-    res.status(200).json('Yahwey');
-  } catch {
-    (error) => console.log(error.message);
+    const newPost = new postMessage(body);
+
+    await newPost.save();
+    res.status(200).json(newPost);
+  } catch (error) {
+    res.status(409).json(error.message);
   }
 };
